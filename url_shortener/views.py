@@ -1,5 +1,9 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+
+from url_shortener.forms import ShortenURLForm
 
 
 def index(request):
-    return HttpResponse('Oi')
+    form = ShortenURLForm()
+
+    return render(request, 'url_shortener/index.html', {'form': form})

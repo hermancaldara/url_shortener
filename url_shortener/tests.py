@@ -3,7 +3,7 @@ from django import forms
 from django.test import TestCase, Client
 
 from url_shortener.forms import ShortenURLForm
-from url_shortener.shortener import Shortener
+from url_shortener.shortener import string_shortener
 
 
 class TestUrl(TestCase):
@@ -42,3 +42,9 @@ class TestForm(TestCase):
 
     def test_field_for_url(self):
         self.assertIsInstance(self.form.base_fields.get('url'), forms.URLField)
+
+
+class TestURLShortner(TestCase):
+
+    def test_foo(self):
+        self.assertEqual(string_shortener('Herman'), '8d57a8f')

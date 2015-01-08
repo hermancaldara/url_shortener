@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class ShortenedURL(models.Model):
+    url = models.URLField()
+    shortened_url = models.URLField()

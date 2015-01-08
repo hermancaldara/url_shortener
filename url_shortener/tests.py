@@ -1,8 +1,10 @@
-from django.core.urlresolvers import resolve
 from django import forms
+from django.core.urlresolvers import resolve
+from django.db import models
 from django.test import TestCase, Client
 
 from url_shortener.forms import ShortenURLForm
+from url_shortener.models import ShortenedURL
 from url_shortener.shortener import string_shortener
 
 
@@ -46,5 +48,14 @@ class TestForm(TestCase):
 
 class TestURLShortner(TestCase):
 
-    def test_foo(self):
+    def test_shorten_a_string(self):
         self.assertEqual(string_shortener('Herman'), '8d57a8f')
+
+
+class TestModelShortenedURL(TestCase):
+
+    def test_has_a_field_for_url(self):
+        self.assertIsInstance(ShortenedURL._meta.get_field('url'), models.URLField)
+
+    def test_has_a_field_for_shortened_url(self):
+        self.assertIsInstance(ShortenedURL._meta.get_field('shortened_url'), models.URLField)

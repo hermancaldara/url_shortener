@@ -20,8 +20,13 @@ class TestView(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        client = Client()
-        cls.response = client.get('/')
+        cls.client = Client()
+        cls.response = cls.client.get('/')
+        cls.response_post = cls.client.post('/', {'url': 'http://www.google.com'})
+
+    @classmethod
+    def tearDownClass(cls):
+        ShortenedURL.objects.all().delete()
 
     def test_index_view_works(self):
         self.assertEqual(self.response.status_code, 200)
@@ -31,6 +36,17 @@ class TestView(TestCase):
 
     def test_index_view_has_form_on_context(self):
         self.assertIsInstance(self.response.context['form'], ShortenURLForm)
+
+    def test_index_view_has_the_shortened_url_on_context_when_form_is_filled_correctly(self):
+        self.assertNotEqual(self.response_post.context['shortened_url'], '')
+
+    def test_index_view_create_a_registry_with_url_and_his_shortened_form(self):
+        self.assertGreater(len(ShortenedURL.objects.all()), 0)
+
+    def test_index_view_does_not_duplicate_a_registry_for_the_same_url(self):
+        self.client.post('/', {'url': 'http://www.google.com'})
+
+        self.assertEqual(len(ShortenedURL.objects.all()), 1)
 
 
 class TestForm(TestCase):

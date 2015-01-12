@@ -1,3 +1,4 @@
+from django.shortcuts import redirect as django_redirect
 from django.shortcuts import render
 
 from url_shortener.forms import ShortenURLForm
@@ -22,3 +23,11 @@ def index(request):
     context['form'] = form
 
     return render(request, 'url_shortener/index.html', context)
+
+
+def redirect(request, hash_shortened_url):
+    shortened_url = ShortenedURL.objects.get(shortened_url=hash_shortened_url)
+
+    original_url = shortened_url.url
+
+    return django_redirect(original_url)

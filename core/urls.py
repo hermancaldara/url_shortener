@@ -3,5 +3,5 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns(
     '',
-    url(r'^$', include('url_shortener.urls')),
+    url(r'', include('url_shortener.urls')),
 )

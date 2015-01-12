@@ -15,8 +15,13 @@ class TestUrl(TestCase):
 
         self.assertEqual(match.view_name, 'url_shortener.views.index')
 
+    def test_redirect_url_is_mapped(self):
+        match = resolve('/abcdefg')
 
-class TestView(TestCase):
+        self.assertEqual(match.view_name, 'url_shortener.views.redirect')
+
+
+class TestIndexView(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -47,6 +52,26 @@ class TestView(TestCase):
         self.client.post('/', {'url': 'http://www.google.com'})
 
         self.assertEqual(len(ShortenedURL.objects.all()), 1)
+
+
+class TestRedirectView(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        ShortenedURL(
+            url="http://www.google.com",
+            shortened_url="abcdefg",
+        ).save()
+
+    @classmethod
+    def tearDownClass(cls):
+        ShortenedURL.objects.all().delete()
+
+    def test_redirect_the_shortened_url_to_the_original_url(self):
+        client = Client()
+        response = client.get('/abcdefg')
+
+        self.assertRedirects(response, 'http://www.google.com')
 
 
 class TestForm(TestCase):

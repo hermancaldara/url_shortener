@@ -1,3 +1,9 @@
+{% if user.is_authenticated %}
+    {{ user }} <a href="{% url 'django.contrib.auth.views.logout' %}">logout</a>
+{% else %}
+    <a href="/login">login</a>
+{% endif %}
+
 <form action="/" method="post">
     {% csrf_token %}
     {{ form }}

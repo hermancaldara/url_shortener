@@ -43,7 +43,7 @@ def restart_gunicorn():
         run(
             "ps aux | grep gunicorn | grep -v grep | awk '{ print $2 }' | xargs kill -9 && " +
             "source $HOME/.virtualenvs/%s/bin/activate &&" % VIRTUALENV_NAME +
-            "gunicorn --config gunicorn.py core.wsgi",
+            "gunicorn --config gunicorn_config.py core.wsgi",
             pty=False
         )
 

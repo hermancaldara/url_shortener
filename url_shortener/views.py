@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.shortcuts import redirect as django_redirect
 from django.shortcuts import render
 
@@ -13,10 +14,17 @@ def index(request):
         form = ShortenURLForm(request.POST)
 
         if form.is_valid():
+            context['host'] = request.get_host()
+
             url = form.cleaned_data['url']
-            shortened_url = string_shortener(url)
-            ShortenedURL.objects.get_or_create(url=url, shortened_url=shortened_url)
-            context['shortened_url'] = shortened_url
+            cached_url = cache.get(url)
+            if cached_url:
+                context['shortened_url'] = cached_url
+            else:
+                shortened_url = string_shortener(url)
+                ShortenedURL.objects.get_or_create(url=url, shortened_url=shortened_url)
+                context['shortened_url'] = shortened_url
+                cache.set(url, shortened_url)
     else:
         form = ShortenURLForm()
 

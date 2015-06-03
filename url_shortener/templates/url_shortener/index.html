@@ -1,15 +1,30 @@
-{% if user.is_authenticated %}
-    {{ user }} <a href="{% url 'django.contrib.auth.views.logout' %}">logout</a>
-{% else %}
-    <a href="/login">login</a>
-{% endif %}
+{% load static from static %}
 
-<form action="/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="{% static 'url_shortener/css/style.css' %}">
+</head>
+<body>
+    <div class="content">
+        {% if user.is_authenticated %}
+            {{ user }} <a href="{% url 'django.contrib.auth.views.logout' %}">logout</a>
+        {% else %}
+            <a class="login" href="/login">login</a>
+        {% endif %}
 
-{% if shortened_url %}
-    <a href="{{ shortened_url }}">{{ shortened_url }}</a>
-{% endif %}
+        <form action="/" method="post">
+            {% csrf_token %}
+            <div>
+                {{ form.url }}
+                <input class="submit" type="submit" value="short it!" />
+            </div>
+        </form>
+
+        {% if shortened_url %}
+            <a class="shortened-url" href="{{ shortened_url }}">{{ host }}/{{ shortened_url }}</a>
+        {% endif %}
+    </div>
+</body>
+</html>

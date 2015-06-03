@@ -1,0 +1,43 @@
+* {
+    box-sizing: border-box;
+}
+.content {
+    margin: 0 auto;
+    width: 700px;
+}
+.login {
+    display: none;
+    text-align: center;
+}
+.submit {
+    background: #ff717e;
+    border: 0;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    height: 38px;
+    margin-left: -105px;
+    text-transform: uppercase;
+    width: 100px;
+}
+.submit:hover {
+    background: #e86672;
+}
+input[type=text] {
+    background: #fff;
+    border: 1px solid #ccc;
+    height: 40px;
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 114px;
+    margin: 0;
+    margin-bottom: 20px;
+    width: 99%;
+    text-align: 10px;
+}
+.shortened-url {
+    color: #ff717e;
+    font-size: 22px;
+    display: block;
+    text-align: center;
+}

@@ -91,7 +91,6 @@ LOGIN_REDIRECT_URL = '/'
 
 CACHES = {
     "default": {
-        # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://localhost:6379/1",
         "OPTIONS": {

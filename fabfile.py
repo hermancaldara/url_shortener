@@ -2,7 +2,6 @@ from fabric.api import local, cd, run, env, sudo
 
 env.hosts = ['192.168.33.10']
 env.user = 'vagrant'
-env.password = 'vagrant'
 env.colorize_errors = True
 
 PROJECT_NAME = 'url_shortener'
@@ -20,7 +19,7 @@ def deploy():
 
 
 def test():
-    local('python manage.py test')
+    local('python manage.py test --settings=core.settings_test')
 
 
 def update():
@@ -42,7 +41,7 @@ def restart_gunicorn():
     with cd(CODE_DIR):
         run(
             "ps aux | grep gunicorn | grep -v grep | awk '{ print $2 }' | xargs kill -9 && " +
-            "source $HOME/.virtualenvs/%s/bin/activate &&" % VIRTUALENV_NAME +
+            "source $HOME/.virtualenvs/%s/bin/activate && " % VIRTUALENV_NAME +
             "gunicorn --config gunicorn_config.py core.wsgi",
             pty=False
         )

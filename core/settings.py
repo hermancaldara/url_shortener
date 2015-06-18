@@ -17,12 +17,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-*fn)dxa3q!cvl&!iaja4diz!p(-3ce8w)((zm*7od!8z&cuxh'
+SECRET_KEY = os.environ.get('URL_SHORTENER_SECRET_KEY', 'secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('URL_SHORTENER_DEBUG', 1)) != 0
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -59,8 +59,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.%s' % os.environ.get('URL_SHORTENER_DATABASES_ENGINE', 'sqlite3'),
+        'NAME': os.environ.get('URL_SHORTENER_DATABASES_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.environ.get('URL_SHORTENER_DATABASES_USER', ''),
+        'PASSWORD': os.environ.get('URL_SHORTENER_DATABASES_PASSWORD', ''),
+        'HOST': os.environ.get('URL_SHORTENER_DATABASES_HOST', ''),
+        'PORT': os.environ.get('URL_SHORTENER_DATABASES_PORT', '')
     }
 }
 
@@ -92,7 +96,7 @@ LOGIN_REDIRECT_URL = '/'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://localhost:6379/1",
+        "LOCATION": os.environ.get('URL_SHORTENER_CACHES_LOCATION', "redis://localhost:6379/1"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

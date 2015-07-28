@@ -55,7 +55,7 @@ def migrate():
 
 def collect_statics():
     with cd(CODE_DIR):
-        run('%s/bin/python manage.py collecstatic --noinput' % VIRTUALENV_DIR)
+        run('%s/bin/python manage.py collectstatic --noinput' % VIRTUALENV_DIR)
 
 
 def restart_gunicorn():

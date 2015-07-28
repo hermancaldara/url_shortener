@@ -18,6 +18,7 @@ def deploy():
     clone_or_update()
     requirements()
     migrate()
+    collect_statics()
     restart_gunicorn()
     copy_nginx_config_file()
     restart_nginx()
@@ -50,6 +51,11 @@ def requirements():
 def migrate():
     with cd(CODE_DIR):
         run('%s/bin/python manage.py migrate' % VIRTUALENV_DIR)
+
+
+def collect_statics():
+    with cd(CODE_DIR):
+        run('%s/bin/python manage.py collecstatic --noinput' % VIRTUALENV_DIR)
 
 
 def restart_gunicorn():

@@ -8,7 +8,7 @@ DEBUG = int(os.environ.get('URL_SHORTENER_DEBUG', 1)) != 0
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -77,19 +77,46 @@ CACHES = {
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
     'handlers': {
-        'file': {
+        'null': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'maxBytes': 50000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
         },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+        'django': {
+            'handlers': ['logfile'],
+            'propagate': True,
+            'level': 'WARN',
+        },
+        'django.db.backends': {
+            'handlers': ['logfile'],
+            'level': 'CRITICAL',
             'propagate': True,
         },
-    },
+        '': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+        },
+    }
 }
